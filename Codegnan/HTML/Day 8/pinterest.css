@@ -1,0 +1,205 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+/* Navigation */
+
+nav{
+
+    height:80px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:0 60px;
+}
+
+.leftnav{
+
+    display:flex;
+    align-items:center;
+    gap:30px;
+}
+
+.logo{
+
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.logo i{
+
+    color:red;
+    font-size:35px;
+}
+
+.logo a{
+
+    text-decoration:none;
+    color:red;
+    font-weight:bold;
+    font-size:24px;
+}
+
+.leftnav a,
+.rightnav a{
+
+    text-decoration:none;
+    color:black;
+}
+
+.search input{
+
+    width:500px;
+    height:42px;
+
+    border:none;
+    outline:none;
+
+    background:#efefef;
+
+    border-radius:30px;
+
+    padding-left:20px;
+}
+
+.rightnav{
+
+    display:flex;
+    align-items:center;
+    gap:20px;
+}
+
+.login{
+
+    background:red;
+    color:white;
+
+    border:none;
+
+    padding:12px 20px;
+
+    border-radius:30px;
+
+    cursor:pointer;
+}
+
+.signup{
+
+    background:#efefef;
+
+    border:none;
+
+    padding:12px 20px;
+
+    border-radius:30px;
+
+    cursor:pointer;
+}
+
+/* Hero */
+
+.hero{
+
+    width:100%;
+    height:calc(100vh - 80px);
+
+    display:flex;
+}
+
+.leftHero{
+
+    width:50%;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+
+    padding:50px;
+}
+
+.leftHero h1{
+
+    font-size:60px;
+
+    color:#c31952;
+
+    margin-bottom:20px;
+
+    text-align:center;
+}
+
+.leftHero p{
+
+    width:80%;
+
+    text-align:center;
+
+    font-size:20px;
+
+    line-height:35px;
+
+    margin-bottom:30px;
+}
+
+.joinBtn{
+
+    width:280px;
+
+    height:50px;
+
+    border:none;
+
+    background:red;
+
+    color:white;
+
+    border-radius:30px;
+
+    margin-bottom:15px;
+
+    cursor:pointer;
+
+    font-size:16px;
+}
+
+.accountBtn{
+
+    width:280px;
+
+    height:50px;
+
+    border:2px solid red;
+
+    background:white;
+
+    color:red;
+
+    border-radius:30px;
+
+    cursor:pointer;
+
+    font-size:16px;
+}
+
+.rightHero{
+
+    width:50%;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.rightHero img{
+
+    width:80%;
+
+    border-radius:20px;
+}
