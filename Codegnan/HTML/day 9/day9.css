@@ -1,0 +1,164 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.nav {
+    height: 80px;
+    width: 100%;
+    background-color: black;
+    color: white;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.hero {
+    background-color: grey;
+    height: 50vh;
+    width: 100%;
+    border: 1px solid whitesmoke;
+    display: flex;
+    gap: 10px;
+}
+
+.H-box1 {
+    border: 1px solid whitesmoke;
+    width: 50%;
+    height: auto;
+}
+
+.H-box2 {
+    border: 1px solid whitesmoke;
+    width: 50%;
+    height: auto;
+}
+
+.whatido {
+    background-color: grey;
+    height: 50vh;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    border: 1px solid whitesmoke;
+
+}
+.whatidocards{
+    display: flex;
+    gap: 10px;
+    padding:20px;
+    width: 100%;
+}
+
+.boxofimg{
+    background-color: white;
+    height: 40%;
+
+}
+
+.boxofinfo{
+    background-color: blanchedalmond;
+    height:40%;
+}
+.boxofinfo p{
+    font-size: 9px;
+}
+.boxofbtn{
+    background-color: burlywood;
+    height: 20%;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 15px;
+    
+}
+
+
+
+.boxofbtn button{
+    border: 2px solid black;
+    background-color: gray;
+    color: white;
+    
+}
+
+.card {
+    width: 15%;
+    height: 200px;
+    border: 1px solid whitesmoke;
+}
+
+.myprojects {
+    background-color: grey;
+    height: 50vh;
+    width: 100%;
+    border: 1px solid whitesmoke;
+    display: flex;
+    gap: 80px;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.project {
+    width: 400px;
+    height: 300px;
+    border: 1px solid whitesmoke;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-direction: column;
+    
+}
+
+
+.education {
+    background-color: grey;
+    height: 50vh;
+    width: 100%;
+    border: 1px solid whitesmoke;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.edtable {
+    width: 80%;
+    border-collapse: collapse;
+    color: white;
+}
+
+.edtable,
+.edtable th,
+.edtable td {
+    border: 1px solid rgb(167, 162, 162);
+}
+
+.edtable th,
+.edtable td {
+    padding: 12px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.edtable th {
+    background-color: #333;
+}
+
+.AandC {
+    background-color: grey;
+    height: 50vh;
+    width: 100%;
+    border: 1px solid whitesmoke;
+}
+
+.declaration {
+    background-color: grey;
+    height: 50vh;
+    width: 100%;
+    border: 1px solid whitesmoke;
+}

@@ -1,0 +1,24 @@
+.hero1{
+    display: grid;
+
+    /* 3 equal columns */
+    grid-template-columns: repeat(3, 1fr);
+
+    /* Row heights */
+    grid-template-rows: 80px 80px;
+
+    gap: 10px;
+}
+
+.hero1 nav{
+    background-color: steelblue;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Make nav4 occupy all 3 columns */
+.nav4{
+    grid-column: 1 / 3;
+}

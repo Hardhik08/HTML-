@@ -1,0 +1,232 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    width:100%;
+}
+
+/* ---------------- NAVBAR ---------------- */
+
+.navbar{
+
+    height:80px;
+    width:100%;
+
+    background:#00A651;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:0 80px;
+
+}
+
+.logo h2{
+
+    color:white;
+    letter-spacing:2px;
+
+}
+
+.menu{
+
+    display:flex;
+    gap:35px;
+
+}
+
+.menu a{
+
+    text-decoration:none;
+    color:white;
+    font-weight:bold;
+
+}
+
+.menu a:hover{
+
+    color:black;
+
+}
+
+
+/* ---------------- HERO ---------------- */
+
+.hero{
+
+    width:100%;
+    min-height:80vh;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:60px 80px;
+    gap:50px;
+
+}
+
+.hero-content{
+
+    flex:1;
+
+    display:flex;
+    flex-direction:column;
+    gap:25px;
+
+}
+
+.hero-content h1{
+
+    font-size:60px;
+    line-height:1.2;
+
+}
+
+.hero-content p{
+
+    font-size:18px;
+    line-height:30px;
+    color:#555;
+
+}
+
+.hero-image{
+
+    flex:1;
+
+    display:flex;
+    justify-content:center;
+
+}
+
+.hero-image img{
+
+    width:100%;
+    max-width:500px;
+    height:auto;
+
+}
+
+.buttons{
+
+    display:flex;
+    gap:20px;
+
+}
+
+button{
+
+    width:160px;
+    height:50px;
+
+    border:none;
+    border-radius:8px;
+
+    cursor:pointer;
+    font-size:16px;
+
+}
+
+.buy{
+
+    background:#00A651;
+    color:white;
+
+}
+
+.contact{
+
+    background:black;
+    color:white;
+
+}
+
+
+/* ---------------- ABOUT ---------------- */
+
+.about{
+
+    width:100%;
+    min-height:100vh;
+
+    padding:80px;
+
+}
+
+.title{
+
+    text-align:left;
+    margin-bottom:60px;
+
+}
+
+.title h1{
+
+    font-size:42px;
+    margin-bottom:15px;
+
+}
+
+.title p{
+
+    color:#666;
+
+}
+
+.about-container{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    gap:60px;
+
+}
+
+.about-image{
+
+    flex:1;
+
+    display:flex;
+    justify-content:center;
+
+}
+
+.about-image img{
+
+    width:100%;
+    max-width:450px;
+    height:auto;
+
+}
+
+.about-content{
+
+    flex:1;
+
+    display:flex;
+    flex-direction:column;
+    gap:25px;
+
+}
+
+.about-content h2{
+
+    font-size:38px;
+
+}
+
+.about-content p{
+
+    color:#555;
+    line-height:30px;
+
+}
+
+
