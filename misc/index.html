@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MCQ Practice Engine</title>
+<style>
+body {
+    font-family: Arial;
+    background: #0f172a;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+.container {
+    max-width: 700px;
+    margin: auto;
+    background: #1e293b;
+    padding: 20px;
+    border-radius: 12px;
+}
+
+button {
+    padding: 10px 15px;
+    margin: 8px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.option {
+    display: block;
+    width: 100%;
+    background: #334155;
+    color: white;
+}
+
+.correct { background: green !important; }
+.wrong { background: red !important; }
+
+.hidden { display: none; }
+
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h2>MCQ Practice</h2>
+    <p id="progress"></p>
+    <h3 id="question"></h3>
+
+    <div id="options"></div>
+
+    <p id="feedback"></p>
+
+    <button id="nextBtn" class="hidden">Next</button>
+
+    <div id="result" class="hidden">
+        <h2>Result</h2>
+        <p id="score"></p>
+        <p id="analysis"></p>
+        <button onclick="restart()">Retry</button>
+    </div>
+</div>
+
+<script>
+
+const allQuestions = [
+
+{q:"Who owns means of production in socialism?",options:["Govt","Private","Foreign","Consumers"],ans:0,topic:"Basics"},
+{q:"Socialism focuses on?",options:["Profit","Welfare","Luxury","Exports"],ans:1,topic:"Basics"},
+{q:"Planning in socialism is?",options:["Random","Centralized","Private","Foreign"],ans:1,topic:"Basics"},
+{q:"Collective ownership means?",options:["Govt ownership","Private","Mixed","None"],ans:0,topic:"Features"},
+{q:"Socialism reduces?",options:["Equality","Inequality","Production","Imports"],ans:1,topic:"Features"},
+{q:"Main goal of socialism?",options:["Profit","Welfare","Exports","Imports"],ans:1,topic:"Features"},
+{q:"Which avoids class conflict?",options:["Capitalism","Socialism","Mixed","None"],ans:1,topic:"Features"},
+{q:"Anarcho-socialism opposes?",options:["Govt","People","Workers","Firms"],ans:0,topic:"Types"},
+{q:"Utopian socialism focuses on?",options:["Profit","Ethics","War","Trade"],ans:1,topic:"Types"},
+{q:"State communism has?",options:["Decentralization","Centralization","Private control","Free market"],ans:1,topic:"Types"},
+{q:"Democratic socialism allows?",options:["No govt","Partial govt","Full private","No rules"],ans:1,topic:"Types"},
+
+];
+
+// Generate 100 questions by repeating + shuffling
+let questions = [];
+for(let i=0;i<10;i++) questions = questions.concat(allQuestions);
+
+shuffle(questions);
+
+let index = 0;
+let score = 0;
+let topicStats = {};
+
+function loadQuestion() {
+
+    let q = questions[index];
+
+    document.getElementById("progress").innerText =
+        `Question ${index+1} / ${questions.length}`;
+
+    document.getElementById("question").innerText = q.q;
+
+    let optionsHTML = "";
+    q.options.forEach((opt,i)=>{
+        optionsHTML += `<button class="option" onclick="checkAnswer(${i})">${opt}</button>`;
+    });
+
+    document.getElementById("options").innerHTML = optionsHTML;
+    document.getElementById("feedback").innerText = "";
+}
+
+function checkAnswer(selected) {
+
+    let q = questions[index];
+    let buttons = document.querySelectorAll(".option");
+
+    buttons.forEach((btn,i)=>{
+        if(i===q.ans) btn.classList.add("correct");
+        if(i===selected && i!==q.ans) btn.classList.add("wrong");
+        btn.disabled = true;
+    });
+
+    if(selected === q.ans){
+        score++;
+        document.getElementById("feedback").innerText = "Correct";
+    } else {
+        document.getElementById("feedback").innerText = "Wrong";
+    }
+
+    topicStats[q.topic] = topicStats[q.topic] || {correct:0,total:0};
+    topicStats[q.topic].total++;
+    if(selected === q.ans) topicStats[q.topic].correct++;
+
+    document.getElementById("nextBtn").classList.remove("hidden");
+}
+
+document.getElementById("nextBtn").onclick = () => {
+    index++;
+    document.getElementById("nextBtn").classList.add("hidden");
+
+    if(index < questions.length){
+        loadQuestion();
+    } else {
+        showResult();
+    }
+};
+
+function showResult(){
+
+    document.getElementById("question").style.display = "none";
+    document.getElementById("options").style.display = "none";
+    document.getElementById("feedback").style.display = "none";
+    document.getElementById("nextBtn").style.display = "none";
+
+    let percent = ((score/questions.length)*100).toFixed(2);
+
+    document.getElementById("score").innerText =
+        `Score: ${score} / ${questions.length} (${percent}%)`;
+
+    let analysis = "Weak Topics:\n";
+
+    for(let t in topicStats){
+        let acc = (topicStats[t].correct/topicStats[t].total)*100;
+        if(acc < 70){
+            analysis += `${t} (${acc.toFixed(1)}%)\n`;
+        }
+    }
+
+    document.getElementById("analysis").innerText = analysis;
+    document.getElementById("result").classList.remove("hidden");
+}
+
+function restart(){
+    location.reload();
+}
+
+function shuffle(arr){
+    for(let i=arr.length-1;i>0;i--){
+        let j = Math.floor(Math.random()*(i+1));
+        [arr[i],arr[j]]=[arr[j],arr[i]];
+    }
+}
+
+loadQuestion();
+
+</script>
+
+</body>
+</html>

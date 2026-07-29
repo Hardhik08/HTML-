@@ -1,0 +1,959 @@
+<style>
+:root{
+  --bg:#f3ede4;
+  --panel:#fffaf3;
+  --panel-2:#f7efe3;
+  --ink:#211d17;
+  --muted:#6d6255;
+  --soft:#908170;
+  --line:rgba(72,52,24,.12);
+  --line-strong:rgba(72,52,24,.22);
+  --blue:#2f74d9;
+  --green:#1d9e75;
+  --orange:#ba7517;
+  --red:#b14a36;
+  --font-sans:"Aptos","Trebuchet MS","Segoe UI",sans-serif;
+  --font-display:"Georgia","Times New Roman",serif;
+  --font-mono:"Consolas","Courier New",monospace;
+  --color-text-primary:var(--ink);
+  --color-text-secondary:var(--muted);
+  --color-text-tertiary:var(--soft);
+  --color-text-success:#127354;
+  --color-text-info:#215bb3;
+  --color-text-warning:#8e5d13;
+  --color-text-danger:#8f2f23;
+  --color-background-primary:var(--panel);
+  --color-background-secondary:var(--panel-2);
+  --color-background-success:rgba(29,158,117,.12);
+  --color-background-info:rgba(47,116,217,.12);
+  --color-background-danger:rgba(177,74,54,.12);
+  --color-border-secondary:var(--line);
+  --color-border-tertiary:var(--line);
+  --color-border-success:rgba(29,158,117,.3);
+  --color-border-info:rgba(47,116,217,.34);
+  --color-border-danger:rgba(177,74,54,.34);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:var(--font-sans);
+  font-size:13px;
+  color:var(--ink);
+  background:
+    radial-gradient(circle at top left, rgba(255,255,255,.88), transparent 28%),
+    linear-gradient(180deg, #efe7da 0%, #f7f2ea 42%, #f1eadf 100%);
+  padding:24px;
+}
+#root{
+  max-width:1280px;
+  margin:0 auto;
+  min-height:760px;
+  display:grid;
+  grid-template-columns:minmax(0,1.35fr) 360px;
+  grid-template-rows:auto auto 1fr auto;
+  gap:18px;
+  padding:18px;
+  border:1px solid var(--line);
+  border-radius:28px;
+  background:rgba(255,250,243,.88);
+  box-shadow:0 18px 40px rgba(64,44,19,.09);
+}
+#header,#controls,#store-panel,#profile-box,#offer-box,#metrics-box,#log-box{
+  border:1px solid var(--line);
+  border-radius:22px;
+  background:rgba(255,252,247,.92);
+  box-shadow:0 10px 24px rgba(72,52,24,.07);
+}
+#header{
+  grid-column:1/-1;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:16px;
+  padding:22px;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.92), rgba(247,239,227,.9)),
+    linear-gradient(120deg, rgba(29,158,117,.04), rgba(47,116,217,.08));
+}
+.header-copy{display:flex;flex-direction:column;gap:10px}
+.eyebrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.badge{
+  display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;
+  background:var(--color-background-success);border:1px solid var(--color-border-success);
+  color:var(--color-text-success);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+}
+.badge::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor;box-shadow:0 0 0 4px rgba(29,158,117,.18)}
+#header h2{font-family:var(--font-display);font-size:30px;line-height:1.05}
+.header-sub{max-width:700px;line-height:1.6;color:var(--muted)}
+.stage-pills{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;max-width:420px}
+.stage-pill{
+  font-size:11px;padding:7px 12px;border-radius:999px;border:1px solid var(--line);
+  background:rgba(255,255,255,.74);color:var(--muted);transition:all .28s ease;
+}
+.stage-pill.active{
+  transform:translateY(-1px);border-color:var(--color-border-info);background:var(--color-background-info);
+  color:var(--color-text-info);box-shadow:0 8px 18px rgba(47,116,217,.14);
+}
+.header-stats{display:grid;grid-template-columns:repeat(3,minmax(86px,1fr));gap:10px;margin-top:14px}
+.stat-chip{padding:12px 14px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.7)}
+.stat-chip strong{display:block;font-size:18px;margin-bottom:2px}
+.stat-chip span{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--soft)}
+#controls{
+  grid-column:1/-1;
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:16px 18px;
+}
+.toolbar-group{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.toolbar-group.push-right{margin-left:auto}
+.ctrl-btn{
+  font-size:12px;font-weight:700;padding:9px 14px;border-radius:12px;border:1px solid var(--line);
+  background:linear-gradient(180deg, rgba(255,255,255,.94), rgba(247,240,231,.86));color:var(--ink);cursor:pointer;
+  transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.ctrl-btn:hover{transform:translateY(-1px);border-color:var(--line-strong);box-shadow:0 8px 18px rgba(72,52,24,.08)}
+.ctrl-btn.primary{border-color:var(--color-border-info);background:linear-gradient(180deg, rgba(47,116,217,.15), rgba(47,116,217,.09));color:var(--color-text-info)}
+.ctrl-btn.danger{border-color:var(--color-border-danger);background:linear-gradient(180deg, rgba(177,74,54,.15), rgba(177,74,54,.08));color:var(--color-text-danger)}
+.ctrl-btn.ghost{background:rgba(255,255,255,.72)}
+.speed-label,.toolbar-note{font-size:12px;color:var(--muted)}
+select{
+  min-width:78px;padding:8px 10px;border-radius:12px;border:1px solid var(--line);
+  background:rgba(255,255,255,.86);color:var(--ink);
+}
+#cid-box{margin-left:auto;display:flex;align-items:center;gap:10px;color:var(--muted)}
+.cid-chip{
+  display:inline-flex;align-items:center;justify-content:center;min-width:38px;padding:5px 9px;border-radius:999px;
+  border:1px solid var(--line);background:var(--panel-2);font-family:var(--font-mono);color:var(--ink);
+}
+#store-panel{display:flex;flex-direction:column;gap:14px;padding:18px}
+.panel-header,.map-footer,.section-heading,.log-header{display:flex;justify-content:space-between;gap:14px}
+.panel-kicker,.section-label{
+  font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--soft);margin-bottom:8px;
+}
+.panel-title,.section-title,.log-title{font-family:var(--font-display);line-height:1.08}
+.panel-title{font-size:24px;margin-bottom:4px}
+.panel-copy,.section-copy,.legend-note{line-height:1.6;color:var(--muted)}
+.map-pill,.meta-strip,#bandit-box{
+  padding:12px 14px;border-radius:18px;border:1px solid var(--line);background:var(--panel-2);
+}
+.map-pill strong{display:block;font-size:16px;margin-bottom:2px}
+.map-pill span{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--soft)}
+.canvas-shell{
+  padding:14px;border-radius:24px;border:1px solid var(--line);
+  background:radial-gradient(circle at top left, rgba(255,255,255,.8), transparent 28%), linear-gradient(180deg, #f7f1e8 0%, #f0e7d9 100%);
+}
+#store-canvas{
+  width:100%;height:340px;display:block;border:1px solid rgba(72,52,24,.1);border-radius:18px;background:#f1efe8;cursor:crosshair;
+}
+#legend{display:flex;gap:8px;flex-wrap:wrap}
+#side-panel{display:grid;grid-template-rows:auto auto 1fr;gap:18px}
+#profile-box,#offer-box,#metrics-box{padding:18px}
+#offer-box{display:flex;flex-direction:column;gap:14px}
+.section-title{font-size:20px}
+.section-copy{font-size:12px;margin-bottom:14px}
+.profile-focus{
+  display:inline-flex;align-items:center;padding:6px 10px;border-radius:999px;border:1px solid var(--color-border-info);
+  background:var(--color-background-info);color:var(--color-text-info);font-size:11px;font-family:var(--font-mono);
+}
+.interest-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.interest-label{width:78px;flex-shrink:0;color:var(--muted)}
+.interest-bar-bg{flex:1;height:8px;border-radius:999px;background:rgba(72,52,24,.09);overflow:hidden}
+.interest-bar-fill{height:100%;border-radius:999px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+.interest-val{width:34px;text-align:right;font-size:11px;font-weight:700;color:var(--muted)}
+.meta-strip{margin-top:14px;color:var(--muted)}
+.empty-state{
+  padding:18px;border:1px dashed var(--line-strong);border-radius:18px;background:rgba(255,255,255,.6);
+  color:var(--muted);line-height:1.6;
+}
+.offer-placeholder{
+  padding:18px;border:1px dashed var(--line-strong);border-radius:18px;background:rgba(255,255,255,.56);
+  color:var(--muted);line-height:1.6;
+}
+.offer-stack{display:flex;flex-direction:column;gap:10px}
+.offer-card{
+  border:1px solid var(--line);border-radius:18px;padding:14px;
+  background:linear-gradient(180deg, rgba(255,255,255,.96), rgba(248,241,230,.74));
+  box-shadow:0 10px 18px rgba(72,52,24,.06);opacity:0;transform:translateY(8px);transition:all .35s ease;
+}
+.offer-card.show{opacity:1;transform:translateY(0)}
+.offer-title{font-size:17px;font-weight:700;margin-bottom:4px}
+.offer-tag{
+  display:inline-block;margin-bottom:8px;padding:4px 8px;border-radius:999px;
+  background:var(--color-background-info);color:var(--color-text-info);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+}
+.offer-meta{font-size:12px;color:var(--muted);line-height:1.5}
+.offer-actions{display:flex;gap:8px;margin-top:12px}
+.btn-accept,.btn-ignore{font-size:12px;font-weight:700;padding:8px 12px;border-radius:12px;cursor:pointer}
+.btn-accept{border:1px solid var(--color-border-success);background:var(--color-background-success);color:var(--color-text-success)}
+.btn-ignore{border:1px solid var(--line);background:transparent;color:var(--muted)}
+.bandit-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.bandit-lbl{width:88px;flex-shrink:0;font-size:11px;color:var(--muted)}
+.bandit-bar-bg{flex:1;height:6px;border-radius:999px;background:rgba(72,52,24,.08);overflow:hidden}
+.bandit-fill{height:100%;border-radius:999px;background:linear-gradient(90deg, #2f74d9, #1d9e75);transition:width .8s ease}
+.bandit-n{width:36px;text-align:right;font-size:10px;font-weight:700;color:var(--soft)}
+.metric-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.metric-card{
+  padding:14px;border-radius:18px;border:1px solid var(--line);
+  background:radial-gradient(circle at top right, rgba(255,255,255,.65), transparent 35%), linear-gradient(180deg, rgba(255,255,255,.92), rgba(248,241,230,.88));
+}
+.metric-val{font-size:24px;font-weight:700;margin-bottom:4px}
+.metric-lbl{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--soft)}
+.metric-val.green{color:var(--color-text-success)}
+.metric-val.blue{color:var(--color-text-info)}
+#log-box{grid-column:1/-1;padding:16px 18px;max-height:180px;overflow-y:auto;display:none}
+.log-title{font-size:20px}
+.log-entry{
+  font-size:11px;color:var(--muted);padding:4px 0;border-top:1px solid rgba(72,52,24,.06);font-family:var(--font-mono);
+}
+.log-entry:first-of-type{border-top:none}
+.log-entry .ts{color:var(--soft);margin-right:8px}
+.log-entry .hi{color:var(--color-text-info)}
+.log-entry .ok{color:var(--color-text-success)}
+.log-entry .warn{color:var(--color-text-warning)}
+#bandit-box,.stage-pills,.header-stats,.legend-note,.map-pill{display:none}
+#info-modal{
+  position:fixed;inset:0;display:none;align-items:center;justify-content:center;
+  padding:24px;background:rgba(33,29,23,.42);backdrop-filter:blur(8px);z-index:40;
+}
+#info-modal.open{display:flex}
+.modal-card{
+  width:min(760px,100%);max-height:min(88vh,900px);overflow:auto;
+  border:1px solid var(--line);border-radius:24px;background:var(--panel);
+  box-shadow:0 24px 60px rgba(33,29,23,.22);padding:22px;
+}
+.modal-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:18px}
+.modal-title{font-family:var(--font-display);font-size:28px;line-height:1.05}
+.modal-close{
+  min-width:40px;height:40px;border-radius:12px;border:1px solid var(--line);
+  background:rgba(255,255,255,.8);color:var(--ink);cursor:pointer;font-size:18px;
+}
+.modal-copy{color:var(--muted);line-height:1.7;margin-bottom:16px}
+.explain-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.explain-card{
+  padding:16px;border:1px solid var(--line);border-radius:18px;background:var(--panel-2);
+}
+.explain-card h4{font-size:15px;margin-bottom:8px}
+.explain-card p,.explain-card li{color:var(--muted);line-height:1.6}
+.explain-card ul{padding-left:18px}
+.explain-wide{grid-column:1/-1}
+.info-note{
+  margin-top:14px;padding:14px;border-radius:16px;background:var(--color-background-info);
+  border:1px solid var(--color-border-info);color:var(--color-text-info);line-height:1.6;
+}
+@media (max-width:1080px){
+  body{padding:14px}
+  #root{grid-template-columns:1fr;grid-template-rows:auto auto auto auto;padding:14px}
+  #header{grid-template-columns:1fr}
+  #side-panel{grid-template-rows:auto}
+}
+@media (max-width:760px){
+  #root{gap:14px}
+  #header,#controls,#store-panel,#profile-box,#offer-box,#metrics-box,#log-box{border-radius:18px}
+  #header{padding:18px}
+  #header h2{font-size:24px}
+  .header-stats,.metric-grid{grid-template-columns:1fr}
+  .panel-header,.map-footer,.section-heading,.log-header{flex-direction:column;align-items:flex-start}
+  #controls{align-items:flex-start}
+  #cid-box{margin-left:0}
+  #store-canvas{height:300px}
+  .explain-grid{grid-template-columns:1fr}
+}
+</style>
+<div id="root">
+  <div id="header">
+    <div class="header-copy">
+      <div class="eyebrow">
+        <div class="badge">Live</div>
+        <div class="toolbar-note">In-store computer vision and offer orchestration</div>
+      </div>
+      <h2>Smart Retail AI Real-Time Offer Engine</h2>
+      <p class="header-sub">
+        Follow anonymous shoppers across store zones, infer intent from dwell and revisits,
+        and deliver offers in the moment with a lightweight reinforcement loop.
+      </p>
+    </div>
+    <div>
+      <div class="stage-pills">
+        <div class="stage-pill" id="sp1">1. Detect</div>
+        <div class="stage-pill" id="sp2">2. Track</div>
+        <div class="stage-pill" id="sp3">3. Profile</div>
+        <div class="stage-pill" id="sp4">4. Recommend</div>
+        <div class="stage-pill" id="sp5">5. Deliver</div>
+      </div>
+      <div class="header-stats">
+        <div class="stat-chip"><strong>5</strong><span>Edge Cameras</span></div>
+        <div class="stat-chip"><strong>6</strong><span>Store Zones</span></div>
+        <div class="stat-chip"><strong>RL</strong><span>Offer Policy</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="controls">
+    <div class="toolbar-group">
+      <button class="ctrl-btn primary" onclick="toggleSim()">Start</button>
+      <button class="ctrl-btn" onclick="addCustomer()">Add Customer</button>
+      <button class="ctrl-btn danger" onclick="resetSim()">Reset</button>
+    </div>
+    <div class="toolbar-group">
+      <span class="speed-label">Simulation speed</span>
+      <select id="speed-sel" onchange="setSpeed(this.value)">
+        <option value="1">1x</option>
+        <option value="2" selected>2x</option>
+        <option value="4">4x</option>
+      </select>
+    </div>
+    <div class="toolbar-group push-right">
+      <button class="ctrl-btn ghost" onclick="openInfoModal()">How It Works</button>
+    </div>
+    <span id="cid-box">Active shoppers <span id="active-count" class="cid-chip">0</span></span>
+  </div>
+
+  <div id="store-panel">
+    <div class="panel-header">
+      <div>
+        <div class="panel-kicker">Store View</div>
+        <div class="panel-title">Customer Movement Map</div>
+        <div class="panel-copy">
+          Select any shopper on the floor plan to inspect behavioral signals, offer activity, and response likelihood.
+        </div>
+      </div>
+      <div class="map-pill">
+        <strong>YOLO + DeepSORT</strong>
+        <span>Tracking Stack</span>
+      </div>
+    </div>
+    <div class="canvas-shell">
+      <canvas id="store-canvas"></canvas>
+    </div>
+    <div class="map-footer">
+      <div id="legend"></div>
+      <div class="legend-note">Dashed trails show recent movement history for each shopper.</div>
+    </div>
+  </div>
+
+  <div id="side-panel">
+    <div id="profile-box">
+      <div class="section-heading">
+        <div>
+          <div class="section-label">Selected Shopper</div>
+          <div class="section-title">Intent Snapshot</div>
+        </div>
+        <div id="selected-id" class="profile-focus">Click a customer</div>
+      </div>
+      <div class="section-copy">
+        The system updates category interest from zone visits, time spent, and repeat visits.
+      </div>
+      <div id="interest-bars"></div>
+      <div class="meta-strip" id="dwell-info">Dwell: -   Zone: -   Revisits: -</div>
+    </div>
+
+    <div id="offer-box">
+      <div>
+        <div class="section-label">Recommendation</div>
+        <div class="section-title">Current Offer</div>
+      </div>
+      <div class="section-copy">
+        Offers are sent only to the currently selected shopper when the model sees enough purchase intent.
+      </div>
+      <div id="offer-slot" class="offer-stack"></div>
+      <div id="bandit-box">
+        <div class="section-label" style="margin-bottom:8px">Bandit Pull Rates</div>
+        <div id="bandit-rates"></div>
+      </div>
+    </div>
+
+    <div id="metrics-box">
+      <div class="section-label">Session Metrics</div>
+      <div class="section-title" style="margin-bottom:14px">Performance Overview</div>
+      <div class="metric-grid">
+        <div class="metric-card"><div class="metric-val" id="m-offers">0</div><div class="metric-lbl">Offers Sent</div></div>
+        <div class="metric-card"><div class="metric-val green" id="m-oar">0%</div><div class="metric-lbl">Acceptance Rate</div></div>
+        <div class="metric-card"><div class="metric-val blue" id="m-cr">0%</div><div class="metric-lbl">Conversion Rate</div></div>
+        <div class="metric-card"><div class="metric-val" id="m-lat">-</div><div class="metric-lbl">Average Latency</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="log-box">
+    <div class="log-header">
+      <div>
+        <div class="section-label" style="margin-bottom:6px">Event Stream</div>
+        <div class="log-title">Inference and Feedback Log</div>
+      </div>
+      <div class="toolbar-note">Edge AI event timeline updates in real time.</div>
+    </div>
+    <div class="log-entry"><span class="ts">00:00</span>System initialized. Edge AI unit ready.</div>
+  </div>
+</div>
+<div id="info-modal" aria-hidden="true">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-top">
+      <div>
+        <div class="section-label" style="margin-bottom:6px">System Guide</div>
+        <div class="modal-title" id="modal-title">How this recommendation system works</div>
+      </div>
+      <button class="modal-close" onclick="closeInfoModal()" aria-label="Close">x</button>
+    </div>
+    <div class="modal-copy">
+      This demo tracks anonymous shoppers, estimates what product category each shopper is most interested in,
+      and then chooses an offer for that shopper when the confidence is high enough.
+    </div>
+    <div class="explain-grid">
+      <div class="explain-card">
+        <h4>Who receives the offer?</h4>
+        <p>
+          The system suggests an offer to the shopper whose on-screen profile shows enough intent.
+          In the simulation, every shopper has an anonymous ID like <strong>C-214</strong>, and offers are tied to that ID.
+        </p>
+      </div>
+      <div class="explain-card">
+        <h4>How is the offer chosen?</h4>
+        <p>
+          First, the engine finds the shopper's highest-interest category from dwell time and revisits.
+          Then it mixes that best category with a Thompson-sampling bandit so it can still test alternatives.
+        </p>
+      </div>
+      <div class="explain-card explain-wide">
+        <h4>Decision flow</h4>
+        <ul>
+          <li>Detect the shopper and assign an anonymous ID.</li>
+          <li>Track which zone the shopper stays in and how often they return.</li>
+          <li>Convert that behavior into category interest scores.</li>
+          <li>Trigger an offer only when the strongest score crosses the minimum threshold.</li>
+          <li>Learn from accept or ignore feedback to improve future choices.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="info-note">
+      On the dashboard itself, only the selected shopper, current recommendation, and key metrics are shown so the view stays stable and easy to read.
+    </div>
+  </div>
+</div>
+<script>
+const canvas = document.getElementById('store-canvas');
+const ctx = canvas.getContext('2d');
+const W = 560, H = 340;
+canvas.width = W;
+canvas.height = H;
+
+const CATS = ['Dairy','Snacks','Cosmetics','Electronics','Beverages','Clothing'];
+const CAT_COLORS = ['#1D9E75','#BA7517','#D4537E','#378ADD','#534AB7','#D85A30'];
+const OFFERS = [
+  {cat:'Dairy', title:'20% off Greek Yogurt', detail:'Valid in the dairy aisle right now'},
+  {cat:'Snacks', title:'Buy 2 Get 1 Chips', detail:'Available near snacks shelf S3'},
+  {cat:'Cosmetics', title:'Free Serum Sample', detail:'Redeem at the cosmetics counter'},
+  {cat:'Electronics', title:'Rs 500 off Earbuds', detail:'Available in electronics today'},
+  {cat:'Beverages', title:'Cold Press Combo Deal', detail:'Live in beverages aisle B2'},
+  {cat:'Clothing', title:'Flat 30% Summer Wear', detail:'Clothing section promotion'},
+];
+
+const ZONES = [
+  {id:'A',label:'Dairy',x:30,y:30,w:130,h:80,cat:0,color:'#1D9E75'},
+  {id:'B',label:'Snacks',x:210,y:30,w:130,h:80,cat:1,color:'#BA7517'},
+  {id:'C',label:'Cosmetics',x:390,y:30,w:140,h:80,cat:2,color:'#D4537E'},
+  {id:'D',label:'Electronics',x:30,y:160,w:130,h:80,cat:3,color:'#378ADD'},
+  {id:'E',label:'Beverages',x:210,y:160,w:130,h:80,cat:4,color:'#534AB7'},
+  {id:'F',label:'Clothing',x:390,y:160,w:140,h:80,cat:5,color:'#D85A30'},
+];
+
+let customers = [];
+let selectedId = null;
+let simRunning = false;
+let simInterval = null;
+let speed = 2;
+let totalOffers = 0;
+let acceptedOffers = 0;
+let purchasedOffers = 0;
+let latencies = [];
+let banditStats = CATS.map(() => ({alpha:1,beta:1,pulls:0}));
+let tick = 0;
+let logEl = document.getElementById('log-box');
+let isDark = matchMedia('(prefers-color-scheme: dark)').matches;
+const interestBarsEl = document.getElementById('interest-bars');
+const dwellInfoEl = document.getElementById('dwell-info');
+const selectedIdEl = document.getElementById('selected-id');
+const offerSlotEl = document.getElementById('offer-slot');
+const infoModalEl = document.getElementById('info-modal');
+let interestRowsReady = false;
+let lastProfileSignature = '';
+let lastOfferSignature = '';
+let showingEmptyState = false;
+
+function randInt(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
+function rand(a,b){return Math.random()*(b-a)+a;}
+function genId(){return 'C-'+String(randInt(100,999));}
+
+function getZoneAt(x,y){
+  return ZONES.find(z => x >= z.x && x <= z.x + z.w && y >= z.y && y <= z.y + z.h) || null;
+}
+
+function openInfoModal(){
+  infoModalEl.classList.add('open');
+  infoModalEl.setAttribute('aria-hidden', 'false');
+}
+
+function closeInfoModal(){
+  infoModalEl.classList.remove('open');
+  infoModalEl.setAttribute('aria-hidden', 'true');
+}
+
+function ensureInterestRows(){
+  if(interestRowsReady)return;
+  interestBarsEl.innerHTML = CATS.map((cat,i) => (
+    `<div class="interest-row" data-cat="${i}"><span class="interest-label">${cat}</span><div class="interest-bar-bg"><div class="interest-bar-fill" data-fill="${i}" style="width:0%;background:${CAT_COLORS[i]}"></div></div><span class="interest-val" data-val="${i}">0%</span></div>`
+  )).join('');
+  interestRowsReady = true;
+}
+
+function showEmptyProfile(){
+  if(showingEmptyState)return;
+  interestBarsEl.innerHTML = '<div class="empty-state">Click a shopper dot on the floor map to inspect their inferred interest across categories.</div>';
+  showingEmptyState = true;
+  interestRowsReady = false;
+  lastProfileSignature = '';
+}
+
+function showOfferPlaceholder(message){
+  const nextHtml = `<div class="offer-placeholder">${message}</div>`;
+  if(offerSlotEl.innerHTML === nextHtml)return;
+  offerSlotEl.innerHTML = nextHtml;
+  lastOfferSignature = '';
+}
+
+function getOfferStatusMessage(c){
+  if(c.offerStatusMessage)return c.offerStatusMessage;
+  return 'This shopper does not have an active recommendation right now.';
+}
+
+function createCustomer(){
+  const zone = ZONES[randInt(0,5)];
+  return {
+    id:genId(),
+    x:zone.x + rand(10, zone.w - 10),
+    y:zone.y + rand(10, zone.h - 10),
+    vx:rand(-1,1) * speed,
+    vy:rand(-1,1) * speed,
+    interests:CATS.map(() => 0),
+    dwellTimes:CATS.map(() => 0),
+    revisits:CATS.map(() => 0),
+    lastZone:null,
+    currentZone:null,
+    offerPending:false,
+    offerCat:null,
+    offerData:null,
+    offerStatusMessage:null,
+    color:CAT_COLORS[randInt(0,5)],
+    path:[],
+    sessionTick:0,
+    alive:true,
+    latency:null,
+  };
+}
+
+function addCustomer(){
+  if(customers.length >= 8)return;
+  const c = createCustomer();
+  customers.push(c);
+  log(`<span class="hi">[YOLO+DeepSORT]</span> New customer detected -> anonymous ID <span class="hi">${c.id}</span> assigned`);
+  activatePipeline([1,2]);
+  updateActiveCount();
+}
+
+function activatePipeline(stages, dur = 1000){
+  stages.forEach((s,i) => setTimeout(() => {
+    const el = document.getElementById('sp' + s);
+    if(el){
+      el.classList.add('active');
+      setTimeout(() => el.classList.remove('active'), dur);
+    }
+  }, i * 200));
+}
+
+function log(html){
+  const d = document.createElement('div');
+  d.className = 'log-entry';
+  const s = document.createElement('span');
+  s.className = 'ts';
+  const t = Math.floor(tick / 10);
+  s.textContent = String(Math.floor(t / 60)).padStart(2,'0') + ':' + String(t % 60).padStart(2,'0');
+  d.appendChild(s);
+  const sp = document.createElement('span');
+  sp.innerHTML = html;
+  d.appendChild(sp);
+  logEl.appendChild(d);
+  logEl.scrollTop = logEl.scrollHeight;
+  while(logEl.children.length > 80)logEl.removeChild(logEl.children[2]);
+}
+
+function computeInterestScore(c, catIdx){
+  const d = c.dwellTimes[catIdx];
+  const p = Math.min(1, c.dwellTimes[catIdx] / 80);
+  const w = 1 + c.revisits[catIdx] * 0.3;
+  return Math.min(1, (d * p * w) / 100);
+}
+
+function thompsonSample(bandit){
+  let best = -1;
+  let bestSample = -1;
+  bandit.forEach((b,i) => {
+    const s = Math.random() ** (1 / b.alpha) * (1 - Math.random() ** (1 / b.beta));
+    if(s > bestSample){
+      bestSample = s;
+      best = i;
+    }
+  });
+  return best;
+}
+
+function triggerOffer(c){
+  if(c.offerPending)return;
+  const catIdx = c.interests.indexOf(Math.max(...c.interests));
+  if(c.interests[catIdx] < 0.08)return;
+  const banditChoice = thompsonSample(banditStats);
+  const finalCat = (Math.random() > 0.4) ? catIdx : banditChoice;
+  const offer = OFFERS[finalCat];
+  const latMs = randInt(180,320);
+  c.latency = latMs;
+  latencies.push(latMs);
+  c.offerPending = true;
+  c.offerCat = finalCat;
+  c.offerData = offer;
+  c.offerStatusMessage = null;
+  totalOffers++;
+  activatePipeline([3,4,5]);
+  log(`<span class="ok">[Bandit/RL]</span> Offer selected for ${c.id}: "<span class="ok">${offer.title}</span>" (${latMs}ms)`);
+  if(selectedId === c.id)renderOffer(c);
+  banditStats[finalCat].pulls++;
+  updateBanditDisplay();
+  updateMetrics();
+}
+
+function resolveOffer(c, accepted){
+  if(!c.offerPending)return;
+  const cat = c.offerCat;
+  if(accepted){
+    acceptedOffers++;
+    banditStats[cat].alpha++;
+    if(Math.random() > 0.45){
+      purchasedOffers++;
+      banditStats[cat].alpha += 0.5;
+    }
+    c.offerStatusMessage = 'Last offer accepted. The system is waiting for the next strong recommendation moment.';
+    log(`<span class="ok">[Feedback]</span> ${c.id} accepted offer - reward logged. Policy updated.`);
+  } else {
+    banditStats[cat].beta++;
+    c.offerStatusMessage = 'Last offer ignored. The system is waiting for the next strong recommendation moment.';
+    log(`<span class="warn">[Feedback]</span> ${c.id} ignored offer - penalty logged.`);
+  }
+  c.offerPending = false;
+  c.offerCat = null;
+  c.offerData = null;
+  c.offerCard = null;
+  updateMetrics();
+  updateBanditDisplay();
+}
+
+function stepCustomer(c){
+  if(!c.alive)return;
+  c.sessionTick++;
+  c.x += c.vx * speed * 0.4;
+  c.y += c.vy * speed * 0.4;
+  if(c.x < 8){c.x = 8; c.vx = Math.abs(c.vx);}
+  if(c.x > W - 8){c.x = W - 8; c.vx = -Math.abs(c.vx);}
+  if(c.y < 8){c.y = 8; c.vy = Math.abs(c.vy);}
+  if(c.y > H - 50){c.y = H - 50; c.vy = -Math.abs(c.vy);}
+  if(Math.random() < 0.04){c.vx = rand(-1.5,1.5); c.vy = rand(-1.5,1.5);}
+  if(Math.random() < 0.015){
+    const t = ZONES[randInt(0,5)];
+    c.vx = (t.x + t.w / 2 - c.x) * 0.02;
+    c.vy = (t.y + t.h / 2 - c.y) * 0.02;
+  }
+  const z = getZoneAt(c.x,c.y);
+  c.currentZone = z;
+  if(z){
+    c.dwellTimes[z.cat] += 0.5;
+    if(c.lastZone !== z){
+      if(c.revisits[z.cat] > 0){
+        log(`<span class="hi">[Path]</span> ${c.id} revisited zone ${z.label} (revisit #${c.revisits[z.cat] + 1})`);
+      }
+      c.revisits[z.cat]++;
+      c.lastZone = z;
+      activatePipeline([2,3]);
+    }
+    c.interests[z.cat] = computeInterestScore(c, z.cat);
+    if(!c.offerPending && c.interests[z.cat] > 0.18 && Math.random() < 0.012)triggerOffer(c);
+    if(c.offerPending && Math.random() < 0.008)resolveOffer(c, Math.random() > 0.35);
+  }
+  c.path.push({x:c.x,y:c.y});
+  if(c.path.length > 60)c.path.shift();
+  if(c.sessionTick > 400 && Math.random() < 0.002){
+    c.alive = false;
+    customers = customers.filter(x => x.alive);
+    log(`<span class="warn">[Session]</span> ${c.id} exited store.`);
+    updateActiveCount();
+  }
+}
+
+function drawFrame(){
+  ctx.clearRect(0,0,W,H);
+  const bg = isDark ? '#2b2620' : '#f1efe8';
+  ctx.fillStyle = bg;
+  ctx.fillRect(0,0,W,H);
+
+  ZONES.forEach(z => {
+    ctx.save();
+    ctx.globalAlpha = 0.12;
+    ctx.fillStyle = z.color;
+    ctx.beginPath();
+    ctx.roundRect(z.x,z.y,z.w,z.h,12);
+    ctx.fill();
+    ctx.globalAlpha = 0.48;
+    ctx.strokeStyle = z.color;
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.roundRect(z.x,z.y,z.w,z.h,12);
+    ctx.stroke();
+    ctx.restore();
+    ctx.fillStyle = isDark ? '#e4dccc' : '#5f5e5a';
+    ctx.font = '11px var(--font-sans)';
+    ctx.fillText(z.label, z.x + 10, z.y + 18);
+  });
+
+  customers.forEach(c => {
+    if(c.path.length > 2){
+      ctx.save();
+      ctx.globalAlpha = 0.2;
+      ctx.strokeStyle = c.color;
+      ctx.lineWidth = 1.2;
+      ctx.setLineDash([3,4]);
+      ctx.beginPath();
+      c.path.forEach((p,i) => i === 0 ? ctx.moveTo(p.x,p.y) : ctx.lineTo(p.x,p.y));
+      ctx.stroke();
+      ctx.restore();
+    }
+    const sel = selectedId === c.id;
+    if(sel){
+      ctx.save();
+      ctx.globalAlpha = 0.15;
+      ctx.fillStyle = c.color;
+      ctx.beginPath();
+      ctx.arc(c.x,c.y,18,0,Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+    ctx.beginPath();
+    ctx.arc(c.x,c.y,6.5,0,Math.PI * 2);
+    ctx.fillStyle = c.color;
+    ctx.fill();
+    if(c.offerPending){
+      ctx.save();
+      ctx.strokeStyle = c.color;
+      ctx.lineWidth = 1.5;
+      ctx.globalAlpha = 0.6 + 0.4 * Math.sin(tick * 0.3);
+      ctx.beginPath();
+      ctx.arc(c.x,c.y,10.5,0,Math.PI * 2);
+      ctx.stroke();
+      ctx.restore();
+    }
+    ctx.fillStyle = isDark ? '#e4dccc' : '#2c2c2a';
+    ctx.font = '9px var(--font-mono)';
+    ctx.textAlign = 'center';
+    ctx.fillText(c.id, c.x, c.y - 11);
+    ctx.textAlign = 'left';
+    if(c.currentZone){
+      ctx.fillStyle = c.color;
+      ctx.font = '8px var(--font-sans)';
+      ctx.textAlign = 'center';
+      ctx.fillText('dwell ' + Math.floor(c.dwellTimes[c.currentZone.cat]) + 's', c.x, c.y + 21);
+      ctx.textAlign = 'left';
+    }
+  });
+
+  ctx.fillStyle = isDark ? '#9d907c' : '#968970';
+  ctx.font = '10px var(--font-mono)';
+  ctx.fillText('Tracked shoppers: ' + customers.length, 10, H - 10);
+}
+
+function updateSidePanel(){
+  const c = customers.find(x => x.id === selectedId);
+  if(!c){
+    showEmptyProfile();
+    dwellInfoEl.textContent = 'Dwell: -   Zone: -   Revisits: -';
+    selectedIdEl.textContent = 'Click a customer';
+    showOfferPlaceholder('No recommendation yet. Select a shopper and start the simulation to see an offer when intent becomes strong enough.');
+    return;
+  }
+  ensureInterestRows();
+  showingEmptyState = false;
+  const profileSignature = [
+    c.id,
+    c.currentZone ? c.currentZone.label : '-',
+    Math.floor(c.dwellTimes.reduce((a,b) => a + b, 0)),
+    c.revisits.reduce((a,b) => a + b, 0),
+    ...c.interests.map(v => Math.round(v * 100))
+  ].join('|');
+  if(profileSignature !== lastProfileSignature){
+    CATS.forEach((_,i) => {
+      const pct = Math.min(100, Math.round(c.interests[i] * 100));
+      const fill = interestBarsEl.querySelector(`[data-fill="${i}"]`);
+      const val = interestBarsEl.querySelector(`[data-val="${i}"]`);
+      if(fill)fill.style.width = pct + '%';
+      if(val)val.textContent = pct + '%';
+    });
+    const z = c.currentZone;
+    const totalDwell = c.dwellTimes.reduce((a,b) => a + b, 0);
+    const totalRevisit = c.revisits.reduce((a,b) => a + b, 0);
+    dwellInfoEl.textContent = `Dwell: ${Math.floor(totalDwell)}s   Zone: ${z ? z.label : '-'}   Revisits: ${totalRevisit}`;
+    selectedIdEl.textContent = c.id;
+    lastProfileSignature = profileSignature;
+  }
+  if(c.offerPending && c.offerData)renderOffer(c);
+  else showOfferPlaceholder(getOfferStatusMessage(c));
+}
+
+function renderOffer(c){
+  const signature = [c.id, c.offerData.title, c.latency, c.offerPending].join('|');
+  if(signature === lastOfferSignature)return;
+  offerSlotEl.innerHTML = '';
+  const d = document.createElement('div');
+  d.className = 'offer-card';
+  d.id = 'oc-' + c.id;
+  d.innerHTML = `<div class="offer-tag">${c.offerData.cat}</div><div class="offer-title">${c.offerData.title}</div><div class="offer-meta">${c.offerData.detail} | ${c.latency}ms latency</div><div class="offer-actions"><button class="btn-accept" onclick="window._acceptOffer('${c.id}',true)">Accept</button><button class="btn-ignore" onclick="window._acceptOffer('${c.id}',false)">Ignore</button></div>`;
+  offerSlotEl.appendChild(d);
+  requestAnimationFrame(() => d.classList.add('show'));
+  lastOfferSignature = signature;
+}
+
+window._acceptOffer = function(id, accepted){
+  const c = customers.find(x => x.id === id);
+  if(c){
+    resolveOffer(c, accepted);
+    showOfferPlaceholder(getOfferStatusMessage(c));
+  }
+};
+
+function updateMetrics(){
+  const oar = totalOffers ? Math.round(acceptedOffers / totalOffers * 100) : 0;
+  const cr = totalOffers ? Math.round(purchasedOffers / totalOffers * 100) : 0;
+  const avgLat = latencies.length ? Math.round(latencies.reduce((a,b) => a + b) / latencies.length) : null;
+  document.getElementById('m-offers').textContent = totalOffers;
+  document.getElementById('m-oar').textContent = oar + '%';
+  document.getElementById('m-cr').textContent = cr + '%';
+  document.getElementById('m-lat').textContent = avgLat ? avgLat + 'ms' : '-';
+}
+
+function updateBanditDisplay(){
+  const el = document.getElementById('bandit-rates');
+  const totalPulls = banditStats.reduce((a,b) => a + b.pulls, 0) || 1;
+  el.innerHTML = CATS.map((cat,i) => {
+    const pct = Math.round(banditStats[i].pulls / totalPulls * 100);
+    return `<div class="bandit-row"><span class="bandit-lbl">${cat}</span><div class="bandit-bar-bg"><div class="bandit-fill" style="width:${pct}%"></div></div><span class="bandit-n">${pct}%</span></div>`;
+  }).join('');
+}
+
+function updateActiveCount(){
+  document.getElementById('active-count').textContent = customers.length;
+}
+
+canvas.addEventListener('click', e => {
+  const rect = canvas.getBoundingClientRect();
+  const sx = canvas.width / rect.width;
+  const sy = canvas.height / rect.height;
+  const mx = (e.clientX - rect.left) * sx;
+  const my = (e.clientY - rect.top) * sy;
+  let best = null;
+  let bestDist = 25;
+  customers.forEach(c => {
+    const d = Math.hypot(c.x - mx, c.y - my);
+    if(d < bestDist){
+      bestDist = d;
+      best = c;
+    }
+  });
+  if(best){
+    selectedId = best.id;
+    log(`<span class="hi">[Inspector]</span> Selected customer ${best.id} - behavioral profile loaded`);
+  } else {
+    selectedId = null;
+  }
+  if(best && best.offerPending && best.offerData)renderOffer(best);
+  else if(best)showOfferPlaceholder(getOfferStatusMessage(best));
+});
+
+function simStep(){
+  tick++;
+  customers.forEach(c => stepCustomer(c));
+  drawFrame();
+  updateSidePanel();
+  if(tick % 50 === 0)activatePipeline([1,2,3]);
+  if(customers.length === 0 && simRunning && Math.random() < 0.05)addCustomer();
+}
+
+function toggleSim(){
+  const btn = document.querySelector('.ctrl-btn.primary');
+  if(simRunning){
+    clearInterval(simInterval);
+    simRunning = false;
+    btn.textContent = 'Start';
+  } else {
+    simRunning = true;
+    btn.textContent = 'Pause';
+    simInterval = setInterval(simStep, 50);
+    if(customers.length === 0){
+      addCustomer();
+      setTimeout(addCustomer, 600);
+      setTimeout(addCustomer, 1200);
+    }
+  }
+}
+
+function setSpeed(v){
+  speed = parseInt(v, 10);
+  customers.forEach(c => {
+    c.vx *= (speed / 2);
+    c.vy *= (speed / 2);
+  });
+}
+
+function resetSim(){
+  clearInterval(simInterval);
+  simRunning = false;
+  customers = [];
+  selectedId = null;
+  tick = 0;
+  totalOffers = 0;
+  acceptedOffers = 0;
+  purchasedOffers = 0;
+  latencies = [];
+  banditStats = CATS.map(() => ({alpha:1,beta:1,pulls:0}));
+  drawFrame();
+  updateActiveCount();
+  updateMetrics();
+  updateBanditDisplay();
+  lastProfileSignature = '';
+  lastOfferSignature = '';
+  showEmptyProfile();
+  showOfferPlaceholder('No recommendation yet. Select a shopper and start the simulation to see an offer when intent becomes strong enough.');
+  dwellInfoEl.textContent = 'Dwell: -   Zone: -   Revisits: -';
+  selectedIdEl.textContent = 'Click a customer';
+  document.querySelector('.ctrl-btn.primary').textContent = 'Start';
+  logEl.innerHTML = '<div class="log-header"><div><div class="section-label" style="margin-bottom:6px">Event Stream</div><div class="log-title">Inference and Feedback Log</div></div><div class="toolbar-note">Edge AI event timeline updates in real time.</div></div><div class="log-entry"><span class="ts">00:00</span>System reset. Edge AI unit ready.</div>';
+}
+
+const legend = document.getElementById('legend');
+ZONES.forEach(z => {
+  const s = document.createElement('span');
+  s.style.cssText = `font-size:11px;padding:6px 10px;border-radius:999px;background:${z.color}18;border:1px solid ${z.color}55;color:${isDark ? '#e4dccc' : '#2c2c2a'};font-weight:600`;
+  s.textContent = z.label;
+  legend.appendChild(s);
+});
+
+updateBanditDisplay();
+updateMetrics();
+drawFrame();
+updateSidePanel();
+infoModalEl.addEventListener('click', e => {
+  if(e.target === infoModalEl)closeInfoModal();
+});
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape')closeInfoModal();
+});
+</script>
+
+
